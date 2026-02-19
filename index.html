@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hallo kak</title>
+
+<style>
+body {
+    margin: 0;
+    background-image: url('flower.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    flex-direction: column;
+    text-align: center;
+    padding: 5vw;
+    box-sizing: border-box;
+}
+
+/* Teks utama di halaman pertama */
+#greeting, 
+#content h1, 
+#content h2 {
+    color: white; /* teks putih */
+    text-shadow: 2px 2px 5px black; /* shadow hitam */
+}
+
+/* TEXT AUTO RESPONSIVE (9:16 FRIENDLY) */
+h1 {
+    font-size: 6vw;
+    text-shadow: 2px 2px 5px rgb(6, 6, 6);
+    margin: 2vw 0;
+}
+
+h2 {
+    font-size: 4.5vw;
+    text-shadow: 2px 2px 5px black;
+}
+
+/* BUTTON RESPONSIVE */
+button {
+    padding: 3vw 6vw;
+    font-size: 4vw;
+    background-color: pink;
+    border: none;
+    border-radius: 3vw;
+    cursor: pointer;
+    margin: 2vw;
+    max-width: 80%;
+}
+
+button:hover {
+    background-color: hotpink;
+    color: white;
+}
+
+/* IMAGE RESPONSIVE */
+#content img {
+    width: 70%;
+    max-width: 300px;
+    height: auto;
+    margin-top: 4vw;
+    border-radius: 4vw;
+    box-shadow: 0 0 20px black;
+}
+
+/* VIDEO RESPONSIVE 9:16 */
+video {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    border-radius: 4vw;
+}
+
+#content,
+#videoContainer,
+#finalScreen,
+#giftScreen {
+    display: none;
+    color: white;
+}
+
+.valentineText {
+    font-family: 'Great Vibes', cursive;
+    font-size: 10vw;
+    animation: fadeIn 2s ease forwards, glow 2s ease-in-out infinite alternate, floatText 3s ease-in-out infinite;
+    opacity: 0;
+}
+
+/* Background bergerak */
+@keyframes bgAnimation {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+/* Fade in */
+@keyframes fadeIn {
+    to {opacity: 1;}
+}
+
+/* Glow effect */
+@keyframes glow {
+    from {text-shadow: 0 0 10px white, 0 0 20px pink;}
+    to {text-shadow: 0 0 20px white, 0 0 40px hotpink;}
+}
+
+/* Floating effect */
+@keyframes floatText {
+    0%,100% {transform: translateY(0);}
+    50% {transform: translateY(-20px);}
+}
+
+.balloons {
+    position: absolute;
+    bottom: -100px;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.balloon {
+    position: absolute;
+    bottom: -150px;
+    width: 40px;
+    height: 55px;
+    background-color: red;
+    border-radius: 50% 50% 50% 50%;
+    animation: flyUp linear infinite;
+}
+
+.balloon::after {
+    content: "";
+    position: absolute;
+    width: 2px;
+    height: 40px;
+    background: white;
+    top: 55px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Animasi terbang ke atas */
+@keyframes flyUp {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-120vh); opacity: 0; }
+}
+
+#valentineScreen {
+    display: none;
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Semua teks kecuali valentineScreen memakai Playfair Display */
+body *:not(#valentineScreen *) {
+    font-family: 'Playfair Display', serif;
+}
+
+/* Valentine screen tetap Cormorant Garamond */
+#valentineScreen .valentineText {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 700;
+    font-size: 9vw;
+    text-align: center;
+    line-height: 1.3;
+    letter-spacing: 4px;
+    color: #fff;
+    text-shadow:
+        0 0 10px rgba(255, 192, 203, 0.8),
+        0 0 20px rgba(255, 105, 180, 0.6),
+        0 0 40px rgba(255, 20, 147, 0.4);
+}
+
+.valentineText span {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(40px) scale(0.8);
+}
+
+/* Animasi huruf naik turun */
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+@keyframes floatSoft {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+}
+
+</style>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+</head>
+<body>
+
+<!-- Musik hanya diputar di akhir -->
+<audio id="bgm" loop>
+    <source src="john.mp3" type="audio/mpeg">
+</audio>
+
+<h2 id="greeting">Hai Kak Ica 😁</h2>
+
+<button id="playBtn" onclick="playMusic()">Buka Surprise ku dong 💌</button>
+
+<div id="content">
+    <h1>Maaf ya kak telat kirim ini 💖</h1>
+    <img src="maaf.jpeg" alt="foto">
+
+    <div>
+        <button id="iyaBtn">Iyaaaa 💖 </button>
+        <button id="gakBtn">Gak deh 😏 </button>
+    </div>
+</div>
+
+<div id="videoContainer">
+    <video id="myVideo" controls autoplay>
+        <source src="busholeh.mp4" type="video/mp4">
+    </video>
+</div>
+
+<div id="finalScreen">
+    <h1>heheheheh</h1>
+    <h1>canda kak canda</h1>
+    <h2>tombol ini kak yg bener coba pencet</h2>
+    <button id="realBtn">pencet kak</button>
+</div>
+
+<div id="valentineScreen">
+    <div class="valentineText">
+        <span>H</span><span>A</span><span>P</span><span>P</span><span>Y</span><br>
+        <span>V</span><span>A</span><span>L</span><span>E</span><span>N</span><span>T</span><span>I</span><span>N</span><span>E</span><br>
+        <span>D</span><span>A</span><span>Y</span>
+    </div>
+    <div class="balloons"></div>
+</div>
+
+<div id="giftScreen">
+    <h1>Yayyy 😍</h1>
+    <h2>Ini aku ada hadiah kak 🎁</h2>
+    <button id="giftBtn">Buka Hadiahnya ✨</button>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+    let music = document.getElementById("bgm");
+
+    // Tombol pertama
+    function playMusic() {
+        document.getElementById("playBtn").style.display = "none";
+        document.getElementById("greeting").style.display = "none";
+        document.getElementById("content").style.display = "block";
+    }
+    window.playMusic = playMusic;
+
+    // Tombol "Gak deh" menghindar
+    let gakBtn = document.getElementById("gakBtn");
+    let clickCount = 0;
+    gakBtn.addEventListener("click", function() {
+        clickCount++;
+        if (clickCount < 3) {
+            let maxX = window.innerWidth - gakBtn.offsetWidth - 30;
+            let maxY = window.innerHeight - gakBtn.offsetHeight - 30;
+            let randomX = Math.floor(Math.random() * maxX);
+            let randomY = Math.floor(Math.random() * maxY);
+            gakBtn.style.position = "absolute";
+            gakBtn.style.left = randomX + "px";
+            gakBtn.style.top = randomY + "px";
+        } else {
+            gakBtn.style.display = "none";
+            alert("Hiks… tombolnya hilang");
+        }
+    });
+
+    // Tombol "Iyaaaa"
+    document.getElementById("iyaBtn").addEventListener("click", function() {
+        document.getElementById("content").style.display = "none";
+        document.getElementById("giftScreen").style.display = "block";
+    });
+
+    // Tombol buka hadiah
+    document.getElementById("giftBtn").addEventListener("click", function() {
+        document.getElementById("giftScreen").style.display = "none";
+
+        let videoDiv = document.getElementById("videoContainer");
+        videoDiv.style.display = "block";
+
+        let video = document.getElementById("myVideo");
+        video.play();
+
+        video.addEventListener("ended", function() {
+            videoDiv.style.display = "none";
+            document.getElementById("finalScreen").style.display = "block";
+        });
+    });
+
+    // Tombol terakhir
+    document.getElementById("realBtn").addEventListener("click", function() {
+        document.getElementById("finalScreen").style.display = "none";
+        document.getElementById("valentineScreen").style.display = "flex";
+
+        // Mulai musik
+        music.play();
+
+        // Confetti
+        let duration = 3 * 1000;
+        let end = Date.now() + duration;
+        (function frame() {
+            confetti({particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }});
+            confetti({particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }});
+            if (Date.now() < end) requestAnimationFrame(frame);
+        }());
+
+        // Warna huruf acak & animasi
+        const letterColors = ["#ff4e8a", "#4CAF50", "#FFC107", "#2196F3", "#9C27B0", "#FF5722"];
+        const letters = document.querySelectorAll(".valentineText span");
+        letters.forEach((letter, index) => {
+            letter.style.color = letterColors[Math.floor(Math.random() * letterColors.length)];
+            setTimeout(() => {
+                letter.style.transition = "all 0.8s cubic-bezier(.17,.67,.83,.67)";
+                letter.style.opacity = "1";
+                letter.style.transform = "translateY(0) scale(1)";
+                letter.style.animation = "floatSoft 4s ease-in-out infinite";
+            }, index * 180);
+        });
+
+        // Mulai balon
+        startBalloons();
+    });
+
+    function startBalloons() {
+        setInterval(createBalloon, 800);
+    }
+    function createBalloon() {
+        const balloon = document.createElement("div");
+        balloon.classList.add("balloon");
+        balloon.style.left = Math.random() * 100 + "vw";
+        const balloonColors = ["#ff4e8a", "#4CAF50", "#FFC107", "#2196F3", "#9C27B0"];
+        balloon.style.backgroundColor = balloonColors[Math.floor(Math.random() * balloonColors.length)];
+        balloon.style.animationDuration = (6 + Math.random() * 4) + "s";
+        document.querySelector(".balloons").appendChild(balloon);
+        setTimeout(() => balloon.remove(), 10000);
+    }
+
+});
+</script>
+
+</body>
+</html>
